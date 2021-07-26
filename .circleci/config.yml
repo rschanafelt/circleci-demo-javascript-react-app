@@ -3,7 +3,34 @@ orbs:
 
 version: 2.1
 
+jobs:
+  test:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          cache-path: ~/project/node_modules
+          override-ci-command: npm install
+      - run: npm run test
+      - store_test_results:
+          path: /tmp/test-reports
+
 workflows:
-  app-tests:
+  test_my_app:
     jobs:
-      - node/test
+      - test
+
+# jobs:
+#   store_results:
+#     docker:
+#       - image: 'cimg/base:stable'
+#     steps:
+#       - store_test_results:
+#           path: /tmp/test-reports
+
+
+# workflows:
+#   app-tests:
+#     jobs:
+#       - node/test
+#       - store_results
